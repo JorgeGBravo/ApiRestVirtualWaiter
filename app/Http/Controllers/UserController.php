@@ -25,6 +25,7 @@ class UserController extends Controller
             'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'isAdmin' => 'boolean',
         ]);
         if ($validatedData->fails()) {
             return response()->json(['message' => $validatedData->getMessageBag()->first()], 400);
@@ -43,6 +44,8 @@ class UserController extends Controller
             'phone' => strtolower($request->input('phone')),
             'email' => strtolower($request->input('email')),
             'password' => Hash::make($request->input('password')),
+            'isAdmin' => $request->input('isAdmin'),
+
 
         ]);
         return response()->json($user, 200);

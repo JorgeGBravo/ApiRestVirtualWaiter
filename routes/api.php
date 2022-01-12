@@ -18,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/users/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware('auth:sanctum')->post('/users/registerManager', [AuthController::class, 'registerUserManager'])->name('registerUserManager');
-
 Route::middleware('auth:sanctum')->post('/users/registerUser', [UserController::class, 'registerUser'])->name('registerUser');
 
 Route::middleware('auth:sanctum')->post('/users/changePassword', [AuthController::class, 'changePassword'])->name('changePassword');

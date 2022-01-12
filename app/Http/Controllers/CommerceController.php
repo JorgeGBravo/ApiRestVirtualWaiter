@@ -28,7 +28,7 @@ class CommerceController extends Controller
         if ($validatedData->fails()) {
             return response()->json(['message' => $validatedData->getMessageBag()->first()], 400);
         }
-        $user = Commerce::create([
+        $commerce = Commerce::create([
             'tradeName' => strtolower($request->input('tradeName')),
             'idUser' => Auth::id(),
             'cif' => strtolower($request->input('cif')),
@@ -42,10 +42,10 @@ class CommerceController extends Controller
         ]);
         UserCommerce::create([
             'idUser' => auth()->id(),
-            'idCommerce' => $user->id(),
+            'idCommerce' => $commerce->id(),
         ]);
 
-        return response()->json($user, 200);
+        return response()->json($commerce, 200);
     }
 
 
