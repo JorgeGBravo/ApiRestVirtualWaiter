@@ -27,3 +27,7 @@ Route::middleware('auth:sanctum')->post('user/registerCommerce', [CommerceContro
 Route::middleware('auth:sanctum')->get('user/myCommerces', [CommerceController::class, 'myCommerces'])->name('myCommerces');
 
 Route::middleware('auth:sanctum')->post('user/updateCommerce', [CommerceController::class, 'updateCommerces'])->name('updateCommerces');
+
+
+
+Route::post('pruebaValidator', [UserController::class, 'pruebaValidator']);

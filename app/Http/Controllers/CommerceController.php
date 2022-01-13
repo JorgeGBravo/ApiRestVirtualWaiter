@@ -14,19 +14,10 @@ class CommerceController extends Controller
     {
         self::existUserOrCommerce($request->input('cif'));
         self::onlyAdmin();
-        $validatedData = Validator::make($request->all(), [
-            'tradeName' => 'required|string|max:255',
-            'cif' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'province' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'zipcode' => 'required|string|max:255',
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
-        if ($validatedData->fails()) {
-            return response()->json(['message' => $validatedData->getMessageBag()->first()], 400);
+
+        $validator = self::validateDataCreate($request);
+        if($validator != null){
+            return response()->json(['message' => $validator], 400);
         }
         $commerce = Commerce::create([
             'tradeName' => strtolower($request->input('tradeName')),
@@ -59,17 +50,12 @@ class CommerceController extends Controller
     }
 
     public function updateCommerces(Request $request){
+
         $this->onlyAdmin();
-        $validatedData = Validator::make($request->all(), [
-            'address' => 'string|max:255',
-            'province' => 'string|max:255',
-            'country' => 'string|max:255',
-            'zipcode' => 'string|max:255',
-            'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
-            'email' => 'string|email|max:255|unique:users',
-        ]);
-        if ($validatedData->fails()) {
-            return response()->json(['message' => $validatedData->getMessageBag()->first()], 400);
+
+        $validator = self::validatedDataUpdate($request);
+        if($validator != null){
+            return response()->json(['message' => $validator], 400);
         }
 
         $commerce = Commerce::where('cif',$request->input('cif'))
