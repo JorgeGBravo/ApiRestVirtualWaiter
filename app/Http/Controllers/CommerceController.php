@@ -6,7 +6,6 @@ use App\Models\Commerce;
 use App\Models\UserCommerce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class CommerceController extends Controller
 {
@@ -36,15 +35,14 @@ class CommerceController extends Controller
             'idCommerce' => $commerce->id(),
         ]);
 
-        return response()->json($commerce, 200);
+        return response()->json($commerce);
     }
-
 
     public function myCommerces(){
 
         $commerces = Commerce::where('idUser', Auth::id());
         if(count($commerces) != 0){
-            return response()->json($commerces, 200);
+            return response()->json($commerces);
         }
         return response()->json(['message' => 'you have no associated stores']);
     }
@@ -88,7 +86,7 @@ class CommerceController extends Controller
                 $commerce[0]->address = $request->input('email');
             }
             $commerce[0]->save();
-            return response()->json($commerce[0], 200);
+            return response()->json($commerce[0]);
         }
         return response()->json(['message' => 'This commerce not exists'], 403);
     }

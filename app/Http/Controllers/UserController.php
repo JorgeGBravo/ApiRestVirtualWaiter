@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -30,10 +28,8 @@ class UserController extends Controller
             'email' => strtolower($request->input('email')),
             'password' => Hash::make($request->input('password')),
             'isAdmin' => $request->input('isAdmin'),
-
-
         ]);
-        return response()->json($user, 200);
+        return response()->json($user);
     }
 
     public function updateUser(Request $request){
@@ -75,17 +71,10 @@ class UserController extends Controller
                 $user[0]->isAdmin = $request->input('isAdmin');
             }
             $user[0]->save();
-            return response()->json($user[0], 200);
-
+            return response()->json($user[0]);
         }
         return response()->json(['message' => 'the user with the cif does not exist']);
     }
 
-    public function pruebaValidator(Request $request){
-        $validator = self::validateDataCreate($request);
-        if($validator != null){
-            return response()->json(['message' => $validator], 400);
-        }
 
-    }
 }
