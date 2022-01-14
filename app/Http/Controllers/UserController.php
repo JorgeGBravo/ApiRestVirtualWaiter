@@ -29,7 +29,7 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
             'isAdmin' => $request->input('isAdmin'),
         ]);
-        return response()->json($user);
+        return response()->json($user, 201);
     }
 
     public function updateUser(Request $request){

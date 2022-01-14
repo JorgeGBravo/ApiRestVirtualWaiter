@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablesTable extends Migration
+class CreateCommerceTablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
-            $table->id();
+        Schema::create('commerce_tables', function (Blueprint $table) {
             $table->bigInteger('idCommerce');
-            $table->string('numberTable');
-            $table->longText('url');
-            $table->string('qr', 100);
-            $table->timestamps();
+            $table->bigInteger('idTable');
         });
     }
 
@@ -30,6 +26,6 @@ class CreateTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('commerce_tables');
     }
 }

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commerce;
+use App\Models\Table;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class Controller extends BaseController
@@ -28,7 +31,7 @@ class Controller extends BaseController
 
     public static function onlyAdmin()
     {
-        if (auth()->id() === 0) {
+        if (auth()->user()->isAdmin === 0) {
             return response()->json(['message' => 'You do not have Administrator permissions'], 403);
         }
     }
@@ -80,5 +83,13 @@ class Controller extends BaseController
         ]);
         if ($validatedData->fails()) {
             return $validatedData->getMessageBag()->first();        }
+    }
+
+    public static function tableExists($idCommerce, $table){
+        $numberTable =Table::where('idCommerce', $idCommerce)
+            ->where('numberTable', $table);
+        if(!isset($numberTable)){
+            return response()->json(['message' => 'this table exists'], 409);
+        }
     }
 }

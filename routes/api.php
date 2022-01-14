@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,8 +31,8 @@ Route::middleware('auth:sanctum')->get('user/myCommerces', [CommerceController::
 
 Route::middleware('auth:sanctum')->post('user/updateCommerce', [CommerceController::class, 'updateCommerces'])->name('updateCommerces');
 
+//Route::middleware('auth:sanctum')->post('commerces/{idCommerce}/table', [TableController::class, 'createTable'])->name('createTable');
 
-
-
+Route::post('commerces/{idCommerce}/table', [TableController::class, 'createTable'])->name('createTable');
 
 Route::post('pruebaValidator', [UserController::class, 'pruebaValidator']);

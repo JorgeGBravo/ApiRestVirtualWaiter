@@ -35,7 +35,7 @@ class CommerceController extends Controller
             'idCommerce' => $commerce->id(),
         ]);
 
-        return response()->json($commerce);
+        return response()->json($commerce, 201);
     }
 
     public function myCommerces(){
