@@ -3,21 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commerce;
+use App\Models\User;
 use App\Models\UserCommerce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CommerceController extends Controller
 {
     public function registerCommerce(Request $request)
     {
-        self::existUserOrCommerce($request->input('cif'));
-        self::onlyAdmin();
+        $isAdmin = User::isAdmin();
+        if($isAdmin == false){
+            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
+        }
+
+        $commerceExist = self::existUserCommerce($request->input('cif'));
+        if($commerceExist == true){
+            return response()->json(['message' => 'the cif already exists'],409);
+        }
 
         $validator = self::validateDataCreate($request);
         if($validator != null){
             return response()->json(['message' => $validator], 400);
         }
+
         $commerce = Commerce::create([
             'tradeName' => strtolower($request->input('tradeName')),
             'idUser' => Auth::id(),
@@ -30,9 +40,10 @@ class CommerceController extends Controller
             'email' => strtolower($request->input('email')),
             'lastUserWhoModifiedTheField' => Auth::id(),
         ]);
+        log::info($commerce->id);
         UserCommerce::create([
-            'idUser' => auth()->id(),
-            'idCommerce' => $commerce->id(),
+            'idUser' => Auth::id(),
+            'idCommerce' => $commerce->id,
         ]);
 
         return response()->json($commerce, 201);
@@ -40,55 +51,59 @@ class CommerceController extends Controller
 
     public function myCommerces(){
 
-        $commerces = Commerce::where('idUser', Auth::id());
-        if(count($commerces) != 0){
-            return response()->json($commerces);
+        $commerces = Commerce::where('idUser', Auth::id())->get();
+        if(count($commerces) === 0){
+            return response()->json(['message' => 'you have no associated stores'], 204);
         }
-        return response()->json(['message' => 'you have no associated stores']);
+        return response()->json($commerces);
     }
 
-    public function updateCommerces(Request $request){
+    public function updateCommerces(Request $request)
+    {
 
-        $this->onlyAdmin();
+        $isAdmin = User::isAdmin();
+        if ($isAdmin == false) {
+            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
+        }
+        $commerce = Commerce::where('cif', $request->input('cif'))
+            ->where('idUser', Auth::id())
+            ->get();
+        if (count($commerce) == 0) {
+            return response()->json(['message' => 'no assigned commerce permissions'], 403);
+        }
 
         $validator = self::validatedDataUpdate($request);
-        if($validator != null){
+        if ($validator != null) {
             return response()->json(['message' => $validator], 400);
         }
 
-        $commerce = Commerce::where('cif',$request->input('cif'))
-            ->where('idUser', Auth::id())
-            ->get();
-        if(count($commerce) != 0){
-            $address = $request->input('address');
-            $province = $request->input('province');
-            $country = $request->input('country');
-            $zipcode = $request->input('zipcode');
-            $phone = $request->input('phone');
-            $email = $request->input('email');
+        $address = $request->input('address');
+        $province = $request->input('province');
+        $country = $request->input('country');
+        $zipcode = $request->input('zipcode');
+        $phone = $request->input('phone');
+        $email = $request->input('email');
 
-            if(isset($address)){
-                $commerce[0]->address = $request->input('address');
-            }
-            if(isset($province)){
-                $commerce[0]->address = $request->input('$province');
-            }
-            if(isset($country)){
-                $commerce[0]->address = $request->input('country');
-            }
-            if(isset($zipcode)){
-                $commerce[0]->address = $request->input('zipcode');
-            }
-            if(isset($phone)){
-                $commerce[0]->address = $request->input('phone');
-            }
-            if(isset($email)){
-                $commerce[0]->address = $request->input('email');
-            }
-            $commerce[0]->save();
-            return response()->json($commerce[0]);
+        if (isset($address)) {
+            $commerce[0]->address = $request->input('address');
         }
-        return response()->json(['message' => 'This commerce not exists'], 403);
+        if (isset($province)) {
+            $commerce[0]->address = $request->input('$province');
+        }
+        if (isset($country)) {
+            $commerce[0]->address = $request->input('country');
+        }
+        if (isset($zipcode)) {
+            $commerce[0]->address = $request->input('zipcode');
+        }
+        if (isset($phone)) {
+            $commerce[0]->address = $request->input('phone');
+        }
+        if (isset($email)) {
+            $commerce[0]->address = $request->input('email');
+        }
+        $commerce[0]->save();
+        return response()->json($commerce[0]);
     }
 
 }
