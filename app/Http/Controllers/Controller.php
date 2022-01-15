@@ -66,23 +66,16 @@ class Controller extends BaseController
 
     public static function validatedDataUpdate($request){
         $validatedData = Validator::make($request->all(), [
-            'address' => 'string|max:255',
-            'province' => 'string|max:255',
-            'country' => 'string|max:255',
-            'zipcode' => 'string|max:255',
-            'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
-            'email' => 'string|email|max:255|unique:users',
-            'isAdmin' => 'boolean',
+            'address' => 'string|max:255|nullable',
+            'province' => 'string|max:255|nullable',
+            'country' => 'string|max:255|nullable',
+            'zipcode' => 'string|max:255|nullable',
+            'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|nullable',
+            'email' => 'string|email|max:255|unique:users|nullable',
+            'isAdmin' => 'boolean|nullable',
         ]);
         if ($validatedData->fails()) {
             return $validatedData->getMessageBag()->first();        }
     }
 
-    public static function tableExists($idCommerce, $table){
-        $numberTable =Table::where('idCommerce', $idCommerce)
-            ->where('numberTable', $table);
-        if(!isset($numberTable)){
-            return response()->json(['message' => 'this table exists'], 409);
-        }
-    }
 }

@@ -64,5 +64,6 @@ class User extends Authenticatable
         if (Auth::user()->isAdmin != 1) {
             return false;
         }
+        return true;
     }
 }

@@ -61,15 +61,17 @@ class CommerceController extends Controller
     public function updateCommerces(Request $request)
     {
 
-        $isAdmin = User::isAdmin();
-        if ($isAdmin == false) {
-            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
-        }
         $commerce = Commerce::where('cif', $request->input('cif'))
             ->where('idUser', Auth::id())
             ->get();
         if (count($commerce) == 0) {
             return response()->json(['message' => 'no assigned commerce permissions'], 403);
+        }
+
+        $isAdmin = User::isAdmin();
+        log::info($isAdmin);
+        if ($isAdmin == false) {
+            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
         }
 
         $validator = self::validatedDataUpdate($request);
