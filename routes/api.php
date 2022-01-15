@@ -35,4 +35,3 @@ Route::middleware('auth:sanctum')->post('/user/commerce/update', [CommerceContro
 
 Route::post('/commerces/{idCommerce}/table', [TableController::class, 'createTable'])->name('createTable');
 
-Route::middleware('auth:sanctum')->get('/prueba', [UserController::class, 'prueba']);
