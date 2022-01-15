@@ -18,27 +18,20 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-    public static function existUserOrCommerce($dataDocument){
-        $commerce = Commerce::all()->where('cif', $dataDocument);
-        if(count($commerce) === 0){
-            return response()->json(['message' => 'the cif already exists']);
+    public static function existUserCommerce($dataDocument){
+        $commerce = Commerce::where('cif', $dataDocument)->get();
+        if(count($commerce) != 0){
+            return true;
         }
         $user = User::all()->where('cif', $dataDocument);
-        if(count($user) === 0){
-            return response()->json(['message' => 'the cif already exists']);
-        }
-    }
-
-    public static function onlyAdmin()
-    {
-        if (auth()->user()->isAdmin === 0) {
-            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
+        if(count($user) != 0){
+            return true;
         }
     }
 
     public static function validateDataCreate($request){
         $data = $request->input('tradeName');
-        if($data === null){
+        if(!isset($data)){
             $validatedData = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'surname' => 'required|string|max:255',
