@@ -19,20 +19,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/users/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware('auth:sanctum')->post('/users/registerUser', [UserController::class, 'registerUser'])->name('registerUser');
+Route::post('/users/registerUser', [UserController::class, 'registerUser'])->name('registerUser');
 
-Route::middleware('auth:sanctum')->post('/users/updateUser', [UserController::class, 'updateUser'])->name('updateUser');
+Route::middleware('auth:sanctum')->post('/users/updateUser', [UserController::class, 'updateUser']);
 
 Route::middleware('auth:sanctum')->post('/users/changePassword', [AuthController::class, 'changePassword'])->name('changePassword');
 
-Route::middleware('auth:sanctum')->post('user/registerCommerce', [CommerceController::class, 'registerCommerce'])->name('registerCommerce');
+Route::middleware('auth:sanctum')->post('/user/registerCommerce', [CommerceController::class, 'registerCommerce'])->name('registerCommerce');
 
-Route::middleware('auth:sanctum')->get('user/myCommerces', [CommerceController::class, 'myCommerces'])->name('myCommerces');
+Route::middleware('auth:sanctum')->get('/user/commerce/myCommerces', [CommerceController::class, 'myCommerces'])->name('myCommerces');
 
-Route::middleware('auth:sanctum')->post('user/updateCommerce', [CommerceController::class, 'updateCommerces'])->name('updateCommerces');
+Route::middleware('auth:sanctum')->post('/user/commerce/update', [CommerceController::class, 'updateCommerces'])->name('updateCommerces');
 
 //Route::middleware('auth:sanctum')->post('commerces/{idCommerce}/table', [TableController::class, 'createTable'])->name('createTable');
 
-Route::post('commerces/{idCommerce}/table', [TableController::class, 'createTable'])->name('createTable');
+Route::post('/commerces/{idCommerce}/table', [TableController::class, 'createTable'])->name('createTable');
 
-Route::post('pruebaValidator', [UserController::class, 'pruebaValidator']);
+Route::middleware('auth:sanctum')->get('/prueba', [UserController::class, 'prueba']);
