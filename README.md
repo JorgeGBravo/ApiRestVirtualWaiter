@@ -12,14 +12,14 @@ post-> /users/registerUser
 {
 "name": "Jorge",
 "surname": "Gonzalez",
-"cif": "78613621N",
+"cif": "78623652N",
 "address": "Victoria",
 "province": "S/C de Tenerife",
-"country": "Puerto de la Cruz",
-"zipcode": 38410,
+"country": "Santa Cruz",
+"zipcode": 40400,
 "gender": "masculino",
 "birthdate": "26/05/1977",
-"phone": "+34630328749",
+"phone": "+34658362145",
 "email": "jdgbravo@gmail.com",
 "isAdmin": 1
 }
@@ -29,8 +29,8 @@ post-> /users/registerUser
 post-> /users/login
 
 {
-"email": "jdgbravo@gmail.com",
-"password": "Na7brv77"
+"email": "mail@gmail.com",
+"password": "Password"
 }
 
 Respuesta
@@ -43,7 +43,7 @@ Respuesta
 post -> /users/changePassword
 
 {
-"email": "jdgbravo22@gmail.com",
+"email": "mail@gmail.com",
 "newPassword": "password"
 }
 
@@ -55,9 +55,9 @@ post-> /user/registerCommerce
 "address": "Victoria",
 "province": "S/C de Tenerife",
 "country": "Puerto de la Cruz",
-"zipcode": "38410",
-"phone": "+34630328749",
-"email": "jdgbravo22@gmail.com"
+"zipcode": "40400",
+"phone": "+34628355406",
+"email": "mail@gmail.com"
 }
 
 
@@ -72,10 +72,10 @@ return:
 "cif": "8888888n",
 "address": "victoria",
 "province": "s/c de tenerife",
-"country": "puerto de la cruz",
+"country": "Santa Cruz",
 "zipcode": "38410",
-"phone": "38410",
-"email": "jdgbravo22@gmail.com",
+"phone": "40400",
+"email": "email@gmail.com",
 "avatar": null,
 "email_verified": null,
 "status": 0,
