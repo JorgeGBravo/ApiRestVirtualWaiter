@@ -15,7 +15,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('login');
-        }
+            $message = response()->json(['message' => 'This Token is not Operative']);
+            abort(401, $message);        }
     }
 }
