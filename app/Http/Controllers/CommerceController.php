@@ -60,7 +60,6 @@ class CommerceController extends Controller
 
     public function updateCommerces(Request $request)
     {
-
         $commerce = Commerce::where('cif', $request->input('cif'))
             ->where('idUser', Auth::id())
             ->get();
@@ -80,27 +79,26 @@ class CommerceController extends Controller
         }
 
         $address = $request->input('address');
-        $province = $request->input('province');
-        $country = $request->input('country');
-        $zipcode = $request->input('zipcode');
-        $phone = $request->input('phone');
-        $email = $request->input('email');
-
         if (isset($address)) {
             $commerce[0]->address = $request->input('address');
         }
+        $province = $request->input('province');
         if (isset($province)) {
             $commerce[0]->address = $request->input('$province');
         }
+        $country = $request->input('country');
         if (isset($country)) {
             $commerce[0]->address = $request->input('country');
         }
+        $zipcode = $request->input('zipcode');
         if (isset($zipcode)) {
             $commerce[0]->address = $request->input('zipcode');
         }
+        $phone = $request->input('phone');
         if (isset($phone)) {
             $commerce[0]->address = $request->input('phone');
         }
+        $email = $request->input('email');
         if (isset($email)) {
             $commerce[0]->address = $request->input('email');
         }
