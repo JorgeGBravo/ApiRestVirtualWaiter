@@ -16,6 +16,7 @@ class CreateCommerceTablesTable extends Migration
         Schema::create('commerce_tables', function (Blueprint $table) {
             $table->bigInteger('idCommerce');
             $table->bigInteger('idTable');
+            $table->timestamps();
         });
     }
 
