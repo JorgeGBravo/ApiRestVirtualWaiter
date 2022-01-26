@@ -16,10 +16,10 @@ class UserController extends Controller
         if($userExist == true){
             return response()->json(['message' => 'the cif already exists']);
         }
-        $validator = self::validateDataCreate($request);
-        if($validator != null){
-            return response()->json(['message' => $validator], 400);
-        }
+        $validator = self::validateDataCreate($request);if($validator != null){
+        return response()->json(['message' => $validator], 400);
+    }
+
         $user = User::create([
             'name' => strtolower($request->input('name')),
             'surname' => strtolower($request->input('surname')),

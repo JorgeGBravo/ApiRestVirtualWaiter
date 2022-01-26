@@ -78,4 +78,14 @@ class Controller extends BaseController
             return $validatedData->getMessageBag()->first();        }
     }
 
+    public static function validatedDataProduct($request){
+        $validatedData = Validator::make($request->all(),[
+            'name' => 'required|string|max:255',
+            'description' => 'string|max:255',
+            'price' => 'required|numeric|dimensions:ratio=3/2',
+        ]);
+        if ($validatedData->fails()) {
+            return $validatedData->getMessageBag()->first();        }
+    }
+
 }
