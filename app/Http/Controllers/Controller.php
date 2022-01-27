@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Commerce;
 use App\Models\Table;
+use App\Models\UserCommerce;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -86,6 +87,19 @@ class Controller extends BaseController
         ]);
         if ($validatedData->fails()) {
             return $validatedData->getMessageBag()->first();        }
+    }
+
+    public function accessControlCommerce($cif){
+        $isAdmin = \App\Models\User::isAdmin();
+        if ($isAdmin == false) {
+            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
+        }
+        $commerce = UserCommerce::where('cif', $cif)
+            ->where('idUser', Auth::id())
+            ->get();
+        if (count($commerce) == 0) {
+            return response()->json(['message' => 'no assigned commerce permissions'], 403);
+        }
     }
 
 }
