@@ -49,10 +49,10 @@ class CommerceController extends Controller
         return response()->json($commerce, 201);
     }
 
-    public function myCommerces(){
-
+    public function myCommerces()
+    {
         $commerces = Commerce::where('idUser', Auth::id())->get();
-        if(count($commerces) === 0){
+        if (count($commerces) === 0) {
             return response()->json(['message' => 'you have no associated stores'], 204);
         }
         return response()->json($commerces);
