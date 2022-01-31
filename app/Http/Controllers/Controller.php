@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commerce;
+use App\Models\Table;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,27 +18,20 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
 
-    public static function existUserOrCommerce($dataDocument){
-        $commerce = Commerce::all()->where('cif', $dataDocument);
-        if(count($commerce) === 0){
-            return response()->json(['message' => 'the cif already exists']);
+    public static function existUserCommerce($dataDocument){
+        $commerce = Commerce::where('cif', $dataDocument)->get();
+        if(count($commerce) != 0){
+            return true;
         }
         $user = User::all()->where('cif', $dataDocument);
-        if(count($user) === 0){
-            return response()->json(['message' => 'the cif already exists']);
-        }
-    }
-
-    public static function onlyAdmin()
-    {
-        if (auth()->id() === 0) {
-            return response()->json(['message' => 'You do not have Administrator permissions'], 403);
+        if(count($user) != 0){
+            return true;
         }
     }
 
     public static function validateDataCreate($request){
         $data = $request->input('tradeName');
-        if($data === null){
+        if(!isset($data)){
             $validatedData = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'surname' => 'required|string|max:255',
@@ -66,23 +60,22 @@ class Controller extends BaseController
             ]);
         }
         if ($validatedData->fails()) {
-            $validate = $validatedData->getMessageBag()->first();
-            return $validate;
+            return $validatedData->getMessageBag()->first();
         }
     }
 
     public static function validatedDataUpdate($request){
         $validatedData = Validator::make($request->all(), [
-            'address' => 'string|max:255',
-            'province' => 'string|max:255',
-            'country' => 'string|max:255',
-            'zipcode' => 'string|max:255',
-            'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9',
-            'email' => 'string|email|max:255|unique:users',
-            'isAdmin' => 'boolean',
+            'address' => 'string|max:255|nullable',
+            'province' => 'string|max:255|nullable',
+            'country' => 'string|max:255|nullable',
+            'zipcode' => 'string|max:255|nullable',
+            'phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:9|nullable',
+            'email' => 'string|email|max:255|unique:users|nullable',
+            'isAdmin' => 'boolean|nullable',
         ]);
         if ($validatedData->fails()) {
-            $validate = $validatedData->getMessageBag()->first();
-            return $validate;        }
+            return $validatedData->getMessageBag()->first();        }
     }
+
 }

@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     public function registerUser(Request $request)
     {
+        $userExist = self::existUserCommerce($request->input('cif'));
+        if($userExist == true){
+            return response()->json(['message' => 'the cif already exists']);
+        }
         $validator = self::validateDataCreate($request);
         if($validator != null){
             return response()->json(['message' => $validator], 400);
@@ -30,62 +34,55 @@ class UserController extends Controller
             'email' => strtolower($request->input('email')),
             'password' => Hash::make($request->input('password')),
             'isAdmin' => $request->input('isAdmin'),
-
-
         ]);
-        return response()->json($user, 200);
+        return response()->json($user, 201);
     }
 
-    public function updateUser(Request $request){
-
+    public function updateUser(Request $request)
+    {
         $validator = self::validatedDataUpdate($request);
-        if($validator != null){
+        if ($validator != null) {
             return response()->json(['message' => $validator], 400);
         }
-
-        $user = User::where('cif', $request->input('cif'))->get();
-        if(count($user) != 0){
+        $user = User::where('id', Auth::id())->get();
+        if (count($user) != 0) {
             $address = $request->input('address');
+            if (isset($address)) {
+                $user[0]->address = $address;
+            }
             $province = $request->input('province');
+            if (isset($province)) {
+                $user[0]->province = $province;
+            }
             $country = $request->input('country');
+            if (isset($country)) {
+                $user[0]->country = $country;
+            }
             $zipcode = $request->input('zipcode');
+            if (isset($zipcode)) {
+                $user[0]->zipcode = $zipcode;
+            }
             $phone = $request->input('phone');
+            if (isset($phone)) {
+                $user[0]->phone = $phone;
+            }
             $email = $request->input('email');
+            if (isset($email)) {
+                $user[0]->email = $email;
+            }
             $isAdmin = $request->input('isAdmin');
-
-            if(isset($address)){
-                $user[0]->address = $request->input('address');
-            }
-            if(isset($province)){
-                $user[0]->address = $request->input('$province');
-            }
-            if(isset($country)){
-                $user[0]->address = $request->input('country');
-            }
-            if(isset($zipcode)){
-                $user[0]->address = $request->input('zipcode');
-            }
-            if(isset($phone)){
-                $user[0]->address = $request->input('phone');
-            }
-            if(isset($email)){
-                $user[0]->address = $request->input('email');
-            }
-            if(isset($isAdmin)){
-                $user[0]->isAdmin = $request->input('isAdmin');
+            if (isset($isAdmin)) {
+                $user[0]->isAdmin = $isAdmin;
             }
             $user[0]->save();
-            return response()->json($user[0], 200);
-
+            return response()->json($user[0]);
         }
         return response()->json(['message' => 'the user with the cif does not exist']);
     }
 
-    public function pruebaValidator(Request $request){
-        $validator = self::validateDataCreate($request);
-        if($validator != null){
-            return response()->json(['message' => $validator], 400);
-        }
-
+    public function prueba()
+    {
+        return response()->json(['message' => 'esto es una prueba']);
     }
+
 }

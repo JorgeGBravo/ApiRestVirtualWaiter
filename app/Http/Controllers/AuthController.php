@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -29,6 +30,7 @@ class AuthController extends Controller
         if (count($user) != 0) {
             $user[0]->password = Hash::make($request->input('newPassword'));
             $user[0]->save();
+            PersonalAccessToken::where('tokenable_id', Auth::id())->delete();
             return response()->json(['message' => 'Updated Password'], 200);
         }
         return response()->json(['message' => 'You are not a registered user'], 403);

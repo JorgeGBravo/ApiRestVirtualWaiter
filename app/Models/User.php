@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -19,7 +21,17 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
+        'cif',
+        'address',
+        'province',
+        'country',
+        'zipcode',
+        'gender',
+        'birthdate',
+        'phone',
         'email',
+        'isAdmin',
         'password',
     ];
 
@@ -44,5 +56,14 @@ class User extends Authenticatable
 
     public function userCommerces(){
         return $this->belongsToMany(UserCommerce::class);
+    }
+
+    public static function isAdmin()
+    {
+        log::info(Auth::user()->isAdmin);
+        if (Auth::user()->isAdmin != 1) {
+            return false;
+        }
+        return true;
     }
 }
