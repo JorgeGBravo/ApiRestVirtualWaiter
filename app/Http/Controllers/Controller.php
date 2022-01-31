@@ -90,7 +90,7 @@ class Controller extends BaseController
     }
 
     public function accessControlCommerce($cif){
-        $isAdmin = \App\Models\User::isAdmin();
+        $isAdmin = User::isAdmin();
         if ($isAdmin == false) {
             return response()->json(['message' => 'You do not have Administrator permissions'], 403);
         }

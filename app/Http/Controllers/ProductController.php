@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Commerce;
 use App\Models\Product;
-use App\Models\User;
-use App\Models\UserCommerce;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,7 +42,4 @@ class ProductController extends Controller
         }
         return response()->json(['message' => 'This product not exist'], 404);
     }
-
-
-
 }
